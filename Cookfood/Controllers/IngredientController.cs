@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cookfood.Controllers
 {
+    [Route("[controller]")]
+    [ApiController]
     public class IngredientController : ControllerBase
     {
         private readonly CookFoodDbContext _databaseContext;
