@@ -52,9 +52,9 @@ namespace Cookfood.Controllers
         }
         [HttpPut("{id}")]
         [Authorize(Roles = Roles.User)]
-        public async Task<ActionResult<List<Recepy>>> Update(Recepy request)
+        public async Task<ActionResult<List<Recepy>>> Update(int id, Recepy request)
         {
-            var Receipt = await _databaseContext.Recepies.FindAsync(request.Id);
+            var Receipt = await _databaseContext.Recepies.FindAsync(id);
             if (Receipt == null)
                 return BadRequest("Receipt not found");
 

@@ -76,7 +76,7 @@ namespace Cookfood.Controllers
         [Authorize(Roles = Roles.User)]
         public async Task<ActionResult<List<RecepySet>>> Update(int id, RecepySet request)
         {
-            var ReceiptSet = await _databaseContext.RecepySets.FindAsync(request.Id);
+            var ReceiptSet = await _databaseContext.RecepySets.FindAsync(id);
             if (ReceiptSet == null)
                 return BadRequest("ReceiptSet not found");
             var authResult = await _authorizationService.AuthorizeAsync(User, ReceiptSet, PolicyNames.ResourceOwner);

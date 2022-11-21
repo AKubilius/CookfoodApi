@@ -48,7 +48,7 @@ namespace Cookfood.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = Roles.Admin)]
-        public async Task<ActionResult<List<Ingredient>>> Update(Ingredient request)
+        public async Task<ActionResult<List<Ingredient>>> Update(int id, Ingredient request)
         {
             var Ingredient = await _databaseContext.Ingredients.FindAsync(request.Id);
             if (Ingredient == null)
