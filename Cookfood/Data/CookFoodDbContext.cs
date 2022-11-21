@@ -1,9 +1,10 @@
 ﻿using Cookfood.Data.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cookfood.Data
 {
-    public class CookFoodDbContext:DbContext
+    public class CookFoodDbContext:IdentityDbContext<User>
     {
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<Recepy> Recepies { get; set; }

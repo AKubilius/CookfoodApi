@@ -2,6 +2,8 @@
 using Cookfood.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Cookfood.Auth.Model;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cookfood.Controllers
 {
@@ -11,10 +13,12 @@ namespace Cookfood.Controllers
     {
         private readonly CookFoodDbContext _databaseContext;
         private readonly ILogger<IngredientController> _logger;
-        public IngredientController(CookFoodDbContext context, ILogger<IngredientController> logger)
+        private readonly IAuthorizationService _authorizationService;
+        public IngredientController(CookFoodDbContext context, ILogger<IngredientController> logger, IAuthorizationService authorizationService)
         {
             _databaseContext = context;
             _logger = logger;
+            _authorizationService = authorizationService;
         }
 
         [HttpGet]
@@ -34,18 +38,26 @@ namespace Cookfood.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Roles.User)]
         public async Task<ActionResult<List<Ingredient>>> Create(Ingredient ingredient)
         {
             _databaseContext.Ingredients.Add(ingredient);
             await _databaseContext.SaveChangesAsync();
             return Ok(await _databaseContext.Ingredients.ToListAsync());
         }
+
         [HttpPut("{id}")]
+        [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult<List<Ingredient>>> Update(Ingredient request)
         {
             var Ingredient = await _databaseContext.Ingredients.FindAsync(request.Id);
             if (Ingredient == null)
                 return BadRequest("Ingredient not found");
+            var authResult = await _authorizationService.AuthorizeAsync(User, Ingredient, PolicyNames.ResourceOwner);
+            if (!authResult.Succeeded)
+            {
+                return BadRequest("Bad request");
+            }
             Ingredient.Name = request.Name;
             Ingredient.Quanity = request.Quanity;
             Ingredient.Measurement = request.Measurement;
@@ -54,11 +66,17 @@ namespace Cookfood.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult<List<Ingredient>>> Delete(int id)
         {
             var Ingredient = await _databaseContext.Ingredients.FindAsync(id);
             if (Ingredient == null)
                 return BadRequest("Ingredient not found");
+            var authResult = await _authorizationService.AuthorizeAsync(User, Ingredient, PolicyNames.ResourceOwner);
+            if (!authResult.Succeeded)
+            {
+                return BadRequest("Bad request");
+            }
 
             _databaseContext.Ingredients.Remove(Ingredient);
             await _databaseContext.SaveChangesAsync();

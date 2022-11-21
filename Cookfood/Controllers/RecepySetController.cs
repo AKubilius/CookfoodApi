@@ -2,6 +2,10 @@
 using Cookfood.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Cookfood.Auth.Model;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Cookfood.Controllers
 {
@@ -11,10 +15,13 @@ namespace Cookfood.Controllers
     {
         private readonly CookFoodDbContext _databaseContext;
         private readonly ILogger<RecepySetController> _logger;
-        public RecepySetController(CookFoodDbContext context, ILogger<RecepySetController> logger)
+        private readonly IAuthorizationService _authorizationService;
+
+        public RecepySetController(CookFoodDbContext context, ILogger<RecepySetController> logger, IAuthorizationService authorizationService)
         {
             _databaseContext = context;
             _logger = logger;
+            _authorizationService = authorizationService;
         }
 
         [HttpGet]
@@ -57,18 +64,27 @@ namespace Cookfood.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Roles.User)]
         public async Task<ActionResult<List<RecepySet>>> Create(RecepySet receiptSet)
         {
+            receiptSet.UserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub);
             _databaseContext.RecepySets.Add(receiptSet);
             await _databaseContext.SaveChangesAsync();
             return Ok(await _databaseContext.RecepySets.ToListAsync());
         }
         [HttpPut("{id}")]
-        public async Task<ActionResult<List<RecepySet>>> Update(RecepySet request)
+        [Authorize(Roles = Roles.User)]
+        public async Task<ActionResult<List<RecepySet>>> Update(int id, RecepySet request)
         {
             var ReceiptSet = await _databaseContext.RecepySets.FindAsync(request.Id);
             if (ReceiptSet == null)
                 return BadRequest("ReceiptSet not found");
+            var authResult = await _authorizationService.AuthorizeAsync(User, ReceiptSet, PolicyNames.ResourceOwner);
+            if (!authResult.Succeeded)
+            {
+                return BadRequest("Bad request");
+            }
+
             ReceiptSet.Name = request.Name;
             ReceiptSet.Type = request.Type;
             await _databaseContext.SaveChangesAsync();
@@ -76,11 +92,18 @@ namespace Cookfood.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = Roles.User)]
         public async Task<ActionResult<List<RecepySet>>> Delete(int id)
         {
             var ReceiptSet = await _databaseContext.RecepySets.FindAsync(id);
             if (ReceiptSet == null)
                 return BadRequest("ReceiptSet not found");
+
+            var authResult = await _authorizationService.AuthorizeAsync(User, ReceiptSet, PolicyNames.ResourceOwner);
+            if (!authResult.Succeeded)
+            {
+                return BadRequest("Bad request");
+            }
 
             _databaseContext.RecepySets.Remove(ReceiptSet);
             await _databaseContext.SaveChangesAsync();

@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Cookfood.Auth.Model;
+using System.ComponentModel.DataAnnotations;
 
 namespace Cookfood.Data.Models
 {
-    public class Recepy
+    public class Recepy : IUserOwnedResource
     {
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
@@ -14,5 +15,8 @@ namespace Cookfood.Data.Models
         public double? Rating { get; set; }
         public int Id { get; set; }
         public int RecepySetId { get; set; }
+
+        public string UserId { get; set; }
+        public User User { get; set; }
     }
 }

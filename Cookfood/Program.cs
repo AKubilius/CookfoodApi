@@ -1,13 +1,51 @@
+using Cookfood.Auth;
+using Cookfood.Auth.Model;
 using Cookfood.Data;
+using Cookfood.Data.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using static System.Formats.Asn1.AsnWriter;
 
 var builder = WebApplication.CreateBuilder(args);
-
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 // Add services to the container.
 builder.Services.AddRazorPages();
 
 builder.Services.AddControllers();
+
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<CookFoodDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters.ValidAudience = builder.Configuration["JWT:ValidAudience"];
+        options.TokenValidationParameters.ValidIssuer = builder.Configuration["JWT:ValidIssuer"];
+        options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]));
+    });
+
 builder.Services.AddDbContext<CookFoodDbContext>();
+builder.Services.AddTransient<IJwtTokenService, JwtTokenService>();
 builder.Services.AddCors();
+builder.Services.AddScoped<AuthDbSeeder>();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(PolicyNames.ResourceOwner, policy => policy.Requirements.Add(new ResourceOwnerRequirement()));
+});
+
+builder.Services.AddSingleton<IAuthorizationHandler, ResourceOwnerAuthorizationHandler>();
+
 
 var app = builder.Build();
 
@@ -35,9 +73,13 @@ app.UseCors(x => x
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
-
+app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapRazorPages();
+
+using var scope = app.Services.CreateScope();
+
+var dbSeeder = scope.ServiceProvider.GetRequiredService<AuthDbSeeder>();
+await dbSeeder.SeedAsync();
 
 app.Run();
