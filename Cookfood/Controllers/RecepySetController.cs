@@ -82,7 +82,7 @@ namespace Cookfood.Controllers
             var authResult = await _authorizationService.AuthorizeAsync(User, ReceiptSet, PolicyNames.ResourceOwner);
             if (!authResult.Succeeded)
             {
-                return BadRequest("Bad request");
+                return BadRequest("No permissions");
             }
 
             ReceiptSet.Name = request.Name;
@@ -102,7 +102,7 @@ namespace Cookfood.Controllers
             var authResult = await _authorizationService.AuthorizeAsync(User, ReceiptSet, PolicyNames.ResourceOwner);
             if (!authResult.Succeeded)
             {
-                return BadRequest("Bad request");
+                return BadRequest("No permissions");
             }
 
             _databaseContext.RecepySets.Remove(ReceiptSet);

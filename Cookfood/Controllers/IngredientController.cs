@@ -56,7 +56,7 @@ namespace Cookfood.Controllers
             var authResult = await _authorizationService.AuthorizeAsync(User, Ingredient, PolicyNames.ResourceOwner);
             if (!authResult.Succeeded)
             {
-                return BadRequest("Bad request");
+                return BadRequest("No permissions");
             }
             Ingredient.Name = request.Name;
             Ingredient.Quanity = request.Quanity;
@@ -75,7 +75,7 @@ namespace Cookfood.Controllers
             var authResult = await _authorizationService.AuthorizeAsync(User, Ingredient, PolicyNames.ResourceOwner);
             if (!authResult.Succeeded)
             {
-                return BadRequest("Bad request");
+                return BadRequest("No permissions");
             }
 
             _databaseContext.Ingredients.Remove(Ingredient);

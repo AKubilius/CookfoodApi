@@ -61,7 +61,7 @@ namespace Cookfood.Controllers
             var authResult = await _authorizationService.AuthorizeAsync(User, Receipt, PolicyNames.ResourceOwner);
             if (!authResult.Succeeded)
             {
-                return BadRequest("Bad request");
+                return BadRequest("No permissions");
             }
 
             Receipt.Description = request.Description;
@@ -74,7 +74,7 @@ namespace Cookfood.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = Roles.User + Roles.Admin)]
+        [Authorize(Roles = Roles.User +","+ Roles.Admin)]
         public async Task<ActionResult<List<Recepy>>> Delete(int id)
         {
             var Receipt = await _databaseContext.Recepies.FindAsync(id);
@@ -84,7 +84,7 @@ namespace Cookfood.Controllers
             var authResult = await _authorizationService.AuthorizeAsync(User, Receipt, PolicyNames.ResourceOwner);
             if (!authResult.Succeeded)
             {
-                return BadRequest("Bad request");
+                return BadRequest("No permissions");
             }
 
             _databaseContext.Recepies.Remove(Receipt);

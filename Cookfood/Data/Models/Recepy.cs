@@ -5,7 +5,8 @@ namespace Cookfood.Data.Models
 {
     public class Recepy : IUserOwnedResource
     {
-        public string Name { get; set; } = null!;
+        [Required]
+        public string Name { get; set; }
         public string? Description { get; set; }
        
         public int Duration { get; set; }
@@ -13,9 +14,10 @@ namespace Cookfood.Data.Models
         public DateTime UpdateDate { get; set; }
         public bool? Confirmed { get; set; }
         public double? Rating { get; set; }
+        [Required]
         public int Id { get; set; }
+        [Required]
         public int RecepySetId { get; set; }
-
         public string? UserId { get; set; } = null;
         public User? User { get; set; } = null;
     }

@@ -5,8 +5,10 @@ namespace Cookfood.Data.Models
 {
     public class RecepySet : IUserOwnedResource
     {
-        public string Name { get; set; } = null!;
+        [Required]
+        public string Name { get; set; }
         public string Type { get; set; } = null!;
+        [Required]
         public int Id { get; set; }
         public string? UserId { get; set; } = null;
         public User? User { get; set; } = null;
