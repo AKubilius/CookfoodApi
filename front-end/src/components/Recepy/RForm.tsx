@@ -56,16 +56,20 @@ const AddCollectionDialog = () => {
     };
 
     return (
-        <div>
+        <div  style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }} >
 
 
             <Button variant="outlined" onClick={handleClickOpen}>
-                Add collection
+                Pridėti receptą
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Add new collection</DialogTitle>
+                <DialogTitle>Pridėkite receptą</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>Please enter collection title and description</DialogContentText>
+                    <DialogContentText>Įveskite recepto pavadinimą, aprašymą ir gaminimo trukmę</DialogContentText>
                     <Box
                         component="form"
                         noValidate
@@ -75,20 +79,20 @@ const AddCollectionDialog = () => {
                         }}
                     >
                         <div>
-                            <TextField onChange={(e) => setName(e.target.value)} required id="outlined-password-input" label="Name" type="text" />{' '}
+                            <TextField onChange={(e) => setName(e.target.value)} required id="outlined-password-input" label="Pavadinimas" type="text" />{' '}
                         </div>
 
                         <div>
-                            <TextField onChange={(e) => setDescription(e.target.value)} required id="outlined-password-input" label="Description" type="text" />
+                            <TextField onChange={(e) => setDescription(e.target.value)} required id="outlined-password-input" label="Aprašymas" type="text" />
                         </div>
                         <div>
-                            <TextField onChange={(e) => setDuration(e.target.value)} required  id="outlined-password-input" label="Duration" type="text" />
+                            <TextField onChange={(e) => setDuration(e.target.value)} required  id="outlined-password-input" label="Gaminimo trukmė" type="text" />
                         </div>
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleAdd}>Add</Button>
+                    <Button onClick={handleClose}>Atšaukti</Button>
+                    <Button onClick={handleAdd}>Pridėti</Button>
                 </DialogActions>
             </Dialog>
         </div>

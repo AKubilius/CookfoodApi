@@ -53,16 +53,20 @@ const AddCollectionDialog = () => {
     };
 
     return (
-        <div>
+        <div  style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
 
 
             <Button variant="outlined" onClick={handleClickOpen}>
-                Add collection
+                Pridėti receptų rinkinį
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Add new collection</DialogTitle>
+                <DialogTitle>Pridėkite receptų rinkinį</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>Please enter collection title and description</DialogContentText>
+                    <DialogContentText>Įveskite pavadinimą ir tipą</DialogContentText>
                     <Box
                         component="form"
                         noValidate
@@ -72,17 +76,17 @@ const AddCollectionDialog = () => {
                         }}
                     >
                         <div>
-                            <TextField onChange={(e) => setName(e.target.value)} required id="outlined-password-input" label="Name" type="text" />{' '}
+                            <TextField onChange={(e) => setName(e.target.value)} required id="outlined-password-input" label="Pavadinimas" type="text" />{' '}
                         </div>
 
                         <div>
-                            <TextField onChange={(e) => setType(e.target.value)} required id="outlined-password-input" label="Type" type="text" />
+                            <TextField onChange={(e) => setType(e.target.value)} required id="outlined-password-input" label="Tipas" type="text" />
                         </div>
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleAdd}>Add</Button>
+                    <Button onClick={handleClose}>Atšaukti</Button>
+                    <Button onClick={handleAdd}>Pridėti</Button>
                 </DialogActions>
             </Dialog>
         </div>

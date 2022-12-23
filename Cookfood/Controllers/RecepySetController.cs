@@ -38,21 +38,6 @@ namespace Cookfood.Controllers
             return Ok(ReceiptSet);
         }
 
-        [HttpGet("{type}")]
-        public async Task<ActionResult<List<RecepySet>>> GetFiltered(string type)
-        {
-            var ReceiptSet = await _databaseContext.RecepySets.ToListAsync();
-            if (ReceiptSet.Count == 0)
-                return BadRequest("ReceiptSet not found");
-
-            var Receipts = ReceiptSet.Where(s => s.Type.ToLower() == type.ToLower()).ToList();
-            if (Receipts.Count == 0)
-                return BadRequest("ReceiptSet not found");
-            return Ok(Receipts);
-        }
-
-
-
         [HttpGet("recepy/{id}")]
         public async Task<ActionResult<List<RecepySet>>> GetReceipts(int id)
         {

@@ -62,10 +62,7 @@ const Recepy: React.FC<IRecepy> = ({
               {description}
             </Typography>
             <div className="travel-offer-details">
-              <span>{`${duration}`}</span>
-              <span className="travel-offer-people-count">
-                {"Minutes"} 
-              </span>
+              
             </div>
             <Typography variant="subtitle1" color="primary">
               Daugiau

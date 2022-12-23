@@ -9,7 +9,7 @@ const HomePage = () => {
     <div>
     <MobNavbar />
     <Recepies/>
-    <Paper/>
+    
     </div>
     
   )

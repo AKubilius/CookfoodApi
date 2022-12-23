@@ -49,7 +49,7 @@ const RecepyEdit = (props: any) => {
     return (
         <div>
             <Button  size="small" onClick={handleClickOpen}>
-                Edit
+                Koreguoti
             </Button>
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Koreguoti receptų rinkinį</DialogTitle>
