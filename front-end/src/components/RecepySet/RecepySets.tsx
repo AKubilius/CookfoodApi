@@ -7,13 +7,12 @@ import {
     ThemeProvider,
   } from "@mui/material";
   import { useEffect, useState } from "react";
-  import RecepyEdit from "./RecepyEdit";
+
   import {api,authConfig} from "../Api/Api";
   import Filters from "../Filter/Filter";
   import { dummHeroPost } from "../../TestingData/Test";
   import Post from "../Banner/Post";
-  import Recepy from "./Recepy";
-import Button from "@mui/material/Button";
+  import RecepySet from "./RecepySet";
   
   const Recepies: React.FC = () => {
     const [Recepies, setTravelOffers] = useState<any[]>([]);
@@ -21,7 +20,7 @@ import Button from "@mui/material/Button";
   
     useEffect(() => {
       const getTravelOffers = async () => {
-        const { data } = await api.get("/Recepy");
+        const { data } = await api.get("/RecepySet");
         setTravelOffers(data);
       };
   
@@ -42,23 +41,20 @@ import Button from "@mui/material/Button";
                 <Box sx={{ flexGrow: 1 }}>
                   <Grid container spacing={2}>
                     <Grid item xs={2}>
-                      
+                      <Filters />
                     </Grid>
                     <Grid item xs={10}>
                       <Grid container spacing={4}>
                         {Recepies?.map((offer, index) => (
-                          
-                          
-                          <Recepy
+                          <RecepySet
                             name={offer.name}
-                            description={offer.description}
+                            type={offer.type}
                             image={"https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg"}
                             imageLabel={"Sveikas"}
-                            duration={offer.duration}
                             key={index}
-                            id={offer.id} />
-                        ))
-                        }
+                            setId={offer.id}
+                          />
+                        ))}
                       </Grid>
                     </Grid>
                   </Grid>
@@ -66,9 +62,6 @@ import Button from "@mui/material/Button";
               </main>
             </Container>
           </ThemeProvider>
-          <Box component="span" sx={{ p: 2 }}>
-      
-    </Box>
         </>
       );
     };

@@ -1,12 +1,8 @@
 import { Button, TextField } from "@mui/material";
 import { useState } from "react";
 
-import NumberSlider from "../Helper/Slider";
-
 const Filters: React.FC = () => {
-  const [departureDate, setDepartureDate] = useState<Date | null>(null);
-  const [arrivalDate, setArrivalDate] = useState<Date | null>(null);
-  const [priceRange, setPriceRange] = useState<number | number[]>([50, 10000]);
+
 
   const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -15,22 +11,15 @@ const Filters: React.FC = () => {
 
   return (
     <div className="filters-container">
-      <h3>Filtrai</h3>
+      <h3>Filtras</h3>
       <form onSubmit={handleOnSubmit}>
         <TextField
           margin="normal"
           fullWidth
-          id="destination"
-          label="Kelionės tikslas"
-          name="destination"
+          id="title"
+          label="Receptas"
+          name="title"
         />
-        <NumberSlider
-          leftLabel="Min. Kaina"
-          rightLabel="Max. Kaina"
-          value={priceRange}
-          onChange={setPriceRange}
-        />
-
         <Button
           type="submit"
           fullWidth

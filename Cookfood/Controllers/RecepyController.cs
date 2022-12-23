@@ -51,7 +51,7 @@ namespace Cookfood.Controllers
             return Ok(await _databaseContext.Recepies.ToListAsync());
         }
         [HttpPut("{id}")]
-        [Authorize(Roles = Roles.User)]
+        [Authorize(Roles = Roles.User + "," + Roles.Admin)]
         public async Task<ActionResult<List<Recepy>>> Update(int id, Recepy request)
         {
             var Receipt = await _databaseContext.Recepies.FindAsync(id);

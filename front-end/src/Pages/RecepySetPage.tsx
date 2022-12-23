@@ -1,15 +1,13 @@
 import MobNavbar from "../components/Navbar/MobNavbar";
 import {Banner} from "../components/Banner/Banner"
-import Recepies from "../components/Recepy/Recepies";
-import Paper from "../components/Banner/Paper"
-
+import RecepySets from "../components/RecepySet/RecepySets";
 
 const HomePage = () => {
   return (
     <div>
     <MobNavbar />
-    <Recepies/>
-    <Paper/>
+    
+    <RecepySets/>
     </div>
     
   )

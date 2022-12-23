@@ -7,21 +7,24 @@ import {
     ThemeProvider,
   } from "@mui/material";
   import { useEffect, useState } from "react";
-  import RecepyEdit from "./RecepyEdit";
+
   import {api,authConfig} from "../Api/Api";
   import Filters from "../Filter/Filter";
   import { dummHeroPost } from "../../TestingData/Test";
   import Post from "../Banner/Post";
-  import Recepy from "./Recepy";
-import Button from "@mui/material/Button";
   
-  const Recepies: React.FC = () => {
+  import Recepy from "./Recepy";
+import { useParams } from "react-router-dom";
+  
+
+
+  const UserRecepies = () => {
     const [Recepies, setTravelOffers] = useState<any[]>([]);
     const theme = createTheme();
-  
+    const { id } = useParams();
     useEffect(() => {
       const getTravelOffers = async () => {
-        const { data } = await api.get("/Recepy");
+        const { data } = await api.get(`RecepySet/recepy/${id}`);
         setTravelOffers(data);
       };
   
@@ -47,8 +50,6 @@ import Button from "@mui/material/Button";
                     <Grid item xs={10}>
                       <Grid container spacing={4}>
                         {Recepies?.map((offer, index) => (
-                          
-                          
                           <Recepy
                             name={offer.name}
                             description={offer.description}
@@ -56,9 +57,9 @@ import Button from "@mui/material/Button";
                             imageLabel={"Sveikas"}
                             duration={offer.duration}
                             key={index}
-                            id={offer.id} />
-                        ))
-                        }
+                            id = {offer.id}
+                          />
+                        ))}
                       </Grid>
                     </Grid>
                   </Grid>
@@ -66,11 +67,8 @@ import Button from "@mui/material/Button";
               </main>
             </Container>
           </ThemeProvider>
-          <Box component="span" sx={{ p: 2 }}>
-      
-    </Box>
         </>
       );
     };
     
-    export default Recepies;
+    export default UserRecepies;

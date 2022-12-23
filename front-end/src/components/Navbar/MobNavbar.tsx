@@ -13,7 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import RestaurantIcon from '@mui/icons-material/Restaurant'
 import {createTheme,colors} from '@mui/material'
-import {Profile} from "../Profile/Profile";
+
 
 const pages = ['Receptai', 'Receptų rinkiniai', 'Blog'];
 const settings = ['Profile', 'Logout'];
@@ -24,6 +24,7 @@ function MobNavbar() {
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
+    
   };
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -31,11 +32,23 @@ function MobNavbar() {
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+    
   };
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+    
   };
+
+
+  const Logout = (e: any): void => {
+    e.preventDefault();
+    localStorage.removeItem("name");
+    window.location.href = "/";
+};
+
+  const name = sessionStorage.getItem("name");
+
 
   const theme = createTheme({
     palette:{
@@ -99,6 +112,13 @@ function MobNavbar() {
               }}
             >
               
+                <MenuItem>
+                  <Button>Receptai</Button>
+                  </MenuItem>
+                <MenuItem>
+                  <Button href='/recepyset'>Receptų rinkiniai</Button>
+                  </MenuItem>            
+             
             </Menu>
           </Box>
           <RestaurantIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -121,17 +141,16 @@ function MobNavbar() {
             CookFood
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
+              <Button sx={{ my: 2, color: 'white', display: 'block' }}>
+                Receptai
               </Button>
-            ))}
+              <Button href='recepyset' sx={{ my: 2, color: 'white', display: 'block' }}>
+                Receptų rinkiniai
+              </Button>
+          
           </Box>
+          {name ? (
+
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
@@ -155,13 +174,29 @@ function MobNavbar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+             
+                <MenuItem  onClick={handleCloseUserMenu}>
+                  <Button href='/profile'>Profile</Button>
                 </MenuItem>
-              ))}
+                <MenuItem  onClick={handleCloseUserMenu}>
+                <Button  onClick={(e) => {
+                            e.preventDefault();
+                            sessionStorage.clear();
+                            window.location.href = "/";
+                        }} >Logout</Button>
+                </MenuItem>
+                
             </Menu>
           </Box>
+            ) : (  <>
+              <Button color="inherit" href="/login">
+                Prisijungti
+              </Button>
+              <Button color="inherit" href="/register">
+                Registruotis
+              </Button>
+            </>
+          )}
         </Toolbar>
       </Container>
     </AppBar>

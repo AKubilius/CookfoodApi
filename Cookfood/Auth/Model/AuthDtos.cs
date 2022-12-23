@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Cookfood.Auth.Model;
 
@@ -8,4 +9,4 @@ public record LoginDto(string UserName, string Password);
 
 public record UserDto(string Id, string UserName, string Email);
 
-public record SuccessfulLoginDto(string AccessToken);
+public record SuccessfulLoginDto(string AccessToken, string UserName, bool Admin);

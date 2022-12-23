@@ -57,9 +57,17 @@ namespace Cookfood.Controllers
 
             // valid user
             var roles = await _userManager.GetRolesAsync(user);
+            bool aa = false;
+            foreach (var role in roles)
+            {
+                if (role =="Admin")
+                {
+                    aa = true;
+                }
+            }
             var accessToken = _jwtTokenService.CreateAccessToken(user.UserName, user.Id, roles);
 
-            return Ok(new SuccessfulLoginDto(accessToken));
+            return Ok(new SuccessfulLoginDto(accessToken,loginDto.UserName, aa));
         }
     }
 }

@@ -25,7 +25,7 @@ namespace Cookfood.Data
         {
             var newAdminUser = new User()
             {
-                UserName = "admin",
+                UserName = "admin1",
                 Email = "admin@admin.com"
             };
 
@@ -36,7 +36,8 @@ namespace Cookfood.Data
                 var createAdminUserResult = await _userManager.CreateAsync(newAdminUser, "VerySafePassword1!");
                 if (createAdminUserResult.Succeeded)
                 {
-                    await _userManager.AddToRolesAsync(newAdminUser, Roles.All);
+                    await _userManager.AddToRoleAsync(newAdminUser, Roles.Admin);
+                    
                 }
             }
         }

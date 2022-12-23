@@ -6,5 +6,6 @@
         public const string User = nameof(User);
 
         public static readonly IReadOnlyCollection<string> All = new[] { Admin, User };
+        public static string[] Admins = new[] { Admin };
     }
 }

@@ -4,15 +4,16 @@ import {
   CardContent,
   CardMedia,
   Grid,
-  IconButton,
   Typography,
+  IconButton
 } from "@mui/material";
-import RecepyEdit from "./RecepyEdit";
 import DeleteIcon from "@mui/icons-material/Delete"
+import Button from "@mui/material/Button";
+import RecepySetEdit from "./RecepySetEdit";
 
 const onDelete = async (ColId: number) => {
   var token = localStorage.getItem('accessToken');
-  const response = await fetch(`https://localhost:7247/Recepy/${ColId}`, {
+  const response = await fetch(`https://localhost:7247/RecepySet/${ColId}`, {
       headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${sessionStorage.getItem("token")}`
@@ -23,52 +24,38 @@ const onDelete = async (ColId: number) => {
 };
 
 const admin = sessionStorage.getItem("admin");
-console.log(admin);
 
-interface IRecepy {
+interface IRecepySet {
   name: string;
-  description: string;
+  type: string;
   image: string;
   imageLabel: string;
-  duration: number;
-  id:number;
+  setId: number;
+  
 }
-
 const path = window.location.pathname; 
-let result = path.slice(0, 10);
 console.log(path)
-console.log(result)
 
-const Recepy: React.FC<IRecepy> = ({
+const RecepySet: React.FC<IRecepySet> = ({
   name,
-  description,
+  type,
   image,
   imageLabel,
-  duration,
-  id
+  setId
+
 }) => {
   return (
     <Grid item xs={12} md={6}>
-      <CardActionArea component="a" href="#">
+      <CardActionArea component="a" href={"/recepyset/" + setId}>
         <Card sx={{ display: "flex" }}>
           <CardContent sx={{ flex: 1 }}>
             <Typography component="h2" variant="h5">
               {name}
             </Typography>
             <Typography variant="subtitle1" color="text.secondary">
-              
             </Typography>
             <Typography variant="subtitle1" paragraph>
-              {description}
-            </Typography>
-            <div className="travel-offer-details">
-              <span>{`${duration}`}</span>
-              <span className="travel-offer-people-count">
-                {"Minutes"} 
-              </span>
-            </div>
-            <Typography variant="subtitle1" color="primary">
-              Daugiau
+              {type}
             </Typography>
           </CardContent>
           <CardMedia
@@ -76,26 +63,28 @@ const Recepy: React.FC<IRecepy> = ({
             sx={{ width: 160, display: { xs: "none", sm: "block" } }}
             image={image}
             alt={imageLabel}
+
           />
         </Card>
       </CardActionArea>
 
-      {(admin ==="true" || result==="/recepyset" ) ? (<>
- <IconButton edge="end" onClick={() => onDelete(id)} aria-label="delete">
+
+          {admin ==="true" || path==="/profile" && admin!==null ? (<>
+ <IconButton edge="end" onClick={() => onDelete(setId)} aria-label="delete">
  <DeleteIcon />
-</IconButton>
-<RecepyEdit props={id}></RecepyEdit></>
+</IconButton><RecepySetEdit props={setId}></RecepySetEdit></>
+
   ) : (  <>
    
-  </>
-)}
+    </>
+  )}
+  
+  
+  
+       
+       
+      </Grid>
+    );
+  };
 
-
-
-     
-     
-    </Grid>
-  );
-};
-
-export default Recepy;
+export default RecepySet;

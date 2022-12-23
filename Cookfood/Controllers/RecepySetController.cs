@@ -51,6 +51,8 @@ namespace Cookfood.Controllers
             return Ok(Receipts);
         }
 
+
+
         [HttpGet("recepy/{id}")]
         public async Task<ActionResult<List<RecepySet>>> GetReceipts(int id)
         {
@@ -63,6 +65,22 @@ namespace Cookfood.Controllers
             return Ok(Receipts);
         }
 
+        [HttpGet("user")]
+        [Authorize(Roles = Roles.User)]
+        public async Task<ActionResult<List<RecepySet>>> GetUserRecepySet()
+        {
+            var ReceiptSet = await _databaseContext.RecepySets.ToListAsync();
+            if (ReceiptSet.Count == 0)
+                return BadRequest("ReceiptSet not found");
+
+            var Receipts = ReceiptSet.Where(s => s.UserId == User.FindFirstValue(JwtRegisteredClaimNames.Sub)).ToList();
+            if (Receipts.Count == 0)
+                return BadRequest("User has no recepySets");
+            return Ok(Receipts);
+        }
+
+
+
         [HttpPost]
         [Authorize(Roles = Roles.User)]
         public async Task<ActionResult<List<RecepySet>>> Create(RecepySet receiptSet)
@@ -73,7 +91,7 @@ namespace Cookfood.Controllers
             return Ok(await _databaseContext.RecepySets.ToListAsync());
         }
         [HttpPut("{id}")]
-        [Authorize(Roles = Roles.User)]
+        [Authorize(Roles = Roles.User + "," + Roles.Admin)]
         public async Task<ActionResult<List<RecepySet>>> Update(int id, RecepySet request)
         {
             var ReceiptSet = await _databaseContext.RecepySets.FindAsync(id);
@@ -92,7 +110,7 @@ namespace Cookfood.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = Roles.User)]
+        [Authorize(Roles = Roles.User + "," + Roles.Admin)]
         public async Task<ActionResult<List<RecepySet>>> Delete(int id)
         {
             var ReceiptSet = await _databaseContext.RecepySets.FindAsync(id);
